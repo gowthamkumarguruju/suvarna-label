@@ -1,6 +1,9 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import Link from "next/link";
+import { graphqlRequest } from "@/lib/graphql-client";
+import { CREATE_ORDER_MUTATION } from "@/graphql/operations";
 
 const steps = [
   "Customer",
@@ -33,14 +36,7 @@ const measurementFields: Record<string, string[]> = {
     "Kurti length",
     "Side slit length",
   ],
-  Dress: [
-    "Bust",
-    "Waist",
-    "Hip",
-    "Shoulder",
-    "Dress length",
-    "Sleeve length",
-  ],
+  Dress: ["Bust", "Waist", "Hip", "Shoulder", "Dress length", "Sleeve length"],
   Lehenga: [
     "Waist",
     "Hip",
@@ -54,6 +50,14 @@ const measurementFields: Record<string, string[]> = {
     "Required adjustment",
     "Target fitting notes",
   ],
+};
+
+const sourceToOrderSource: Record<string, string> = {
+  Phone: "PHONE",
+  WhatsApp: "WHATSAPP",
+  Instagram: "INSTAGRAM",
+  Website: "WEBSITE",
+  "Walk-in": "WALK_IN",
 };
 
 type Draft = {
@@ -116,11 +120,19 @@ const initialDraft: Draft = {
   youtube: false,
 };
 
+type CreateOrderResponse = {
+  createOrder: { id: string; orderNumber: string };
+};
+
 export default function NewOrderPage() {
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState(initialDraft);
   const [measurements, setMeasurements] = useState<Record<string, string>>({});
-  const [saved, setSaved] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [createdOrderNumber, setCreatedOrderNumber] = useState<string | null>(
+    null,
+  );
 
   const total = useMemo(
     () =>
@@ -147,27 +159,62 @@ export default function NewOrderPage() {
     value: string,
   ) => update(key, Number(value));
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
+    setSubmitting(true);
+    setSubmitError(null);
 
-    const order = {
-      ...draft,
-      measurements,
-      total,
-      balance,
-      createdAt: new Date().toISOString(),
-      orderNumber: `SL-${Date.now().toString().slice(-6)}`,
-    };
+    try {
+      const result = await graphqlRequest<
+        CreateOrderResponse,
+        Record<string, unknown>
+      >(CREATE_ORDER_MUTATION, {
+        input: {
+          customer: {
+            name: draft.customerName,
+            phone: draft.phone,
+            whatsapp: draft.whatsapp || undefined,
+            marketingConsent: draft.marketingConsent,
+          },
+          source: sourceToOrderSource[draft.source] ?? "PHONE",
+          items: [
+            {
+              articleType: draft.article,
+              orderType: draft.orderType,
+              description: draft.design || draft.article,
+              color: draft.color || undefined,
+              fabric: draft.fabric || undefined,
+              quantity: draft.quantity,
+              unitPrice: draft.price,
+              stitchingCharge: draft.stitching,
+              customizationCharge: draft.customization,
+              measurements: Object.entries(measurements).map(
+                ([field, value]) => ({ field, value }),
+              ),
+            },
+          ],
+          shippingCharge: draft.shipping,
+          discount: draft.discount,
+          advance: draft.advance,
+          paymentMethod: draft.paymentMethod,
+          requiredBy: draft.dueDate || undefined,
+          notes: draft.notes || undefined,
+          mediaRequired: draft.mediaRequired,
+          customerPreview: draft.customerPreview,
+          websiteListing: draft.websiteListing,
+          instagram: draft.instagram,
+          youtube: draft.youtube,
+        },
+      });
 
-    const current = JSON.parse(
-      localStorage.getItem("suvarna-orders") || "[]",
-    ) as unknown[];
-
-    localStorage.setItem(
-      "suvarna-orders",
-      JSON.stringify([order, ...current]),
-    );
-    setSaved(true);
+      setCreatedOrderNumber(result.createOrder.orderNumber);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Couldn't create the order",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -253,8 +300,8 @@ export default function NewOrderPage() {
                 </label>
               </div>
               <div className="info-box">
-                After database integration, mobile search will load saved
-                addresses, measurements and previous orders.
+                Enter the customer&apos;s Indian mobile number — existing
+                customers are matched automatically when the order is created.
               </div>
             </section>
           )}
@@ -532,9 +579,8 @@ export default function NewOrderPage() {
               </div>
 
               <div className="info-box">
-                Completion creates photography, AI enhancement, approval and
-                publishing tasks. Customer images are usable only according to
-                recorded consent.
+                Completion creates the order, reserves production for custom
+                items, and records any advance payment taken.
               </div>
             </section>
           )}
@@ -587,17 +633,26 @@ export default function NewOrderPage() {
                 />
               </div>
 
-              {saved ? (
+              {submitError && (
+                <div className="info-box" style={{ color: "var(--danger)" }}>
+                  {submitError}
+                </div>
+              )}
+
+              {createdOrderNumber ? (
                 <div className="success-box">
-                  <strong>Order saved locally.</strong>
+                  <strong>Order {createdOrderNumber} created.</strong>
                   <p>
-                    The starter uses browser storage until the database/API
-                    layer is connected.
+                    <Link href="/admin/orders">View all orders</Link>
                   </p>
                 </div>
               ) : (
-                <button type="submit" className="button primary large">
-                  Confirm and create order
+                <button
+                  type="submit"
+                  className="button primary large"
+                  disabled={submitting}
+                >
+                  {submitting ? "Creating…" : "Confirm and create order"}
                 </button>
               )}
             </section>

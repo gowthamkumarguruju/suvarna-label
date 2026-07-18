@@ -1,24 +1,30 @@
-import Link from "next/link";
+"use client";
 
-const products = [
-  {
-    name: "Green Festive Anarkali",
-    price: "₹4,999",
-    note: "Made to order · 10–14 days",
-  },
-  {
-    name: "Embroidered Maroon Blouse",
-    price: "₹2,450",
-    note: "Custom measurements available",
-  },
-  {
-    name: "Everyday Blue Cotton Kurti",
-    price: "₹1,499",
-    note: "Ready-made · Limited stock",
-  },
-];
+import Link from "next/link";
+import { useGraphQL } from "@/lib/use-graphql";
+import { PRODUCTS_QUERY } from "@/graphql/operations";
+
+const currency = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 0,
+});
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
 
 export default function ShopPage() {
+  const { data, loading } = useGraphQL<
+    { products: Product[] },
+    Record<string, never>
+  >(PRODUCTS_QUERY, {});
+
+  const products = data?.products ?? [];
+
   return (
     <main className="storefront">
       <header className="store-header">
@@ -29,7 +35,6 @@ export default function ShopPage() {
         <nav>
           <a href="#collection">Collection</a>
           <a href="#custom">Custom stitching</a>
-          <a href="#track">Track order</a>
           <Link href="/admin">Admin</Link>
         </nav>
       </header>
@@ -38,11 +43,13 @@ export default function ShopPage() {
         <p className="eyebrow">Designed and made with care</p>
         <h1>Clothing that fits your story.</h1>
         <p>
-          Ready-made collections and custom stitching with guided measurements,
-          transparent status updates and delivery across India.
+          Ready-made collections and custom stitching with guided
+          measurements, transparent status updates and delivery across India.
         </p>
         <div>
-          <button className="button primary large">Explore collection</button>
+          <a href="#collection" className="button primary large">
+            Explore collection
+          </a>
           <button className="button large">Order on WhatsApp</button>
         </div>
       </section>
@@ -57,15 +64,21 @@ export default function ShopPage() {
 
         <div className="product-grid">
           {products.map((product, index) => (
-            <article key={product.name} className="product-card">
-              <div className={`product-placeholder product-${index + 1}`}>
+            <article key={product.id} className="product-card">
+              <div className={`product-placeholder product-${(index % 3) + 1}`}>
                 Product image
               </div>
               <h3>{product.name}</h3>
-              <strong>{product.price}</strong>
-              <p className="muted">{product.note}</p>
+              <strong>{currency.format(product.price)}</strong>
+              <p className="muted">
+                {product.quantity > 0 ? "In stock" : "Made to order"}
+              </p>
             </article>
           ))}
+
+          {!loading && products.length === 0 && (
+            <p className="muted">New arrivals coming soon.</p>
+          )}
         </div>
       </section>
     </main>

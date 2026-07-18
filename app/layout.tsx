@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Suvarna Label",
-  description: "Order, inventory, production and media operations",
+  description: "Order, inventory and payment operations",
 };
 
 export default function RootLayout({
