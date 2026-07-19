@@ -2,10 +2,11 @@ import Link from "next/link";
 
 const navigation = [
   ["Dashboard", "/admin"],
+  ["Customers", "/admin/customers"],
   ["Orders", "/admin/orders"],
   ["New phone order", "/admin/orders/new"],
   ["Inventory", "/admin/inventory"],
-  ["Media & publishing", "/admin/media"],
+  ["Payments", "/admin/payments"],
   ["Customer shop", "/shop"],
 ];
 

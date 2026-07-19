@@ -1,5 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { inventory, orders } from "@/lib/mock-data";
+import { useGraphQL } from "@/lib/use-graphql";
+import {
+  ORDERS_QUERY,
+  PRODUCTS_QUERY,
+  FLAGGED_PAYMENTS_QUERY,
+} from "@/graphql/operations";
 
 const currency = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -7,11 +14,49 @@ const currency = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0,
 });
 
+type OrderRow = {
+  id: string;
+  orderNumber: string;
+  source: string;
+  productionStatus: string;
+  paymentStatus: string;
+  mediaStatus: string;
+  total: number;
+  createdAt: string;
+  customer: { name: string; phone: string };
+};
+
+type ProductRow = {
+  id: string;
+  lowStock: boolean;
+};
+
+type FlaggedPaymentRow = {
+  orderId: string;
+};
+
 export default function DashboardPage() {
-  const revenue = orders.reduce((sum, order) => sum + order.total, 0);
-  const lowStock = inventory.filter(
-    (item) => item.onHand - item.reserved <= item.reorder,
+  const orders = useGraphQL<{ orders: OrderRow[] }, Record<string, never>>(
+    ORDERS_QUERY,
+    {},
   );
+  const products = useGraphQL<
+    { products: ProductRow[] },
+    Record<string, never>
+  >(PRODUCTS_QUERY, {});
+  const flagged = useGraphQL<
+    { flaggedPayments: FlaggedPaymentRow[] },
+    Record<string, never>
+  >(FLAGGED_PAYMENTS_QUERY, {});
+
+  const orderList = orders.data?.orders ?? [];
+  const revenue = orderList.reduce((sum, order) => sum + order.total, 0);
+  const lowStockCount =
+    products.data?.products.filter((product) => product.lowStock).length ?? 0;
+  const flaggedCount = flagged.data?.flaggedPayments.length ?? 0;
+
+  const loading = orders.loading || products.loading || flagged.loading;
+  const errorMessage = orders.error || products.error || flagged.error;
 
   return (
     <>
@@ -20,8 +65,8 @@ export default function DashboardPage() {
           <p className="eyebrow">Operations overview</p>
           <h1>Suvarna Label dashboard</h1>
           <p className="muted">
-            Manage orders from the first phone call through delivery and product
-            promotion.
+            Manage orders from the first phone call through delivery and
+            payment.
           </p>
         </div>
         <Link href="/admin/orders/new" className="button primary">
@@ -29,34 +74,28 @@ export default function DashboardPage() {
         </Link>
       </header>
 
+      {errorMessage && <p className="muted">Couldn&apos;t load data: {errorMessage}</p>}
+
       <section className="stat-grid">
         <article className="stat-card">
           <span>Open orders</span>
-          <strong>{orders.length}</strong>
+          <strong>{loading ? "…" : orderList.length}</strong>
           <small>Across all channels</small>
         </article>
         <article className="stat-card">
           <span>Pipeline value</span>
-          <strong>{currency.format(revenue)}</strong>
-          <small>Current sample orders</small>
-        </article>
-        <article className="stat-card">
-          <span>Media tasks</span>
-          <strong>
-            {
-              orders.filter(
-                (order) =>
-                  order.mediaStatus !== "Not required" &&
-                  order.mediaStatus !== "Published",
-              ).length
-            }
-          </strong>
-          <small>Need team action</small>
+          <strong>{loading ? "…" : currency.format(revenue)}</strong>
+          <small>Current orders</small>
         </article>
         <article className="stat-card warning">
           <span>Low stock</span>
-          <strong>{lowStock.length}</strong>
-          <small>Purchase attention</small>
+          <strong>{loading ? "…" : lowStockCount}</strong>
+          <small>Products need reorder</small>
+        </article>
+        <article className="stat-card warning">
+          <span>Payments needing attention</span>
+          <strong>{loading ? "…" : flaggedCount}</strong>
+          <small>See payments page</small>
         </article>
       </section>
 
@@ -65,7 +104,7 @@ export default function DashboardPage() {
           <div className="panel-heading">
             <div>
               <p className="eyebrow">Live workflow</p>
-              <h2>Orders needing attention</h2>
+              <h2>Recent orders</h2>
             </div>
             <Link href="/admin/orders">View all</Link>
           </div>
@@ -76,35 +115,40 @@ export default function DashboardPage() {
                 <tr>
                   <th>Order</th>
                   <th>Customer</th>
-                  <th>Article</th>
                   <th>Production</th>
                   <th>Payment</th>
-                  <th>Due</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {orderList.slice(0, 8).map((order) => (
                   <tr key={order.id}>
                     <td>
-                      <strong>{order.id}</strong>
+                      <strong>{order.orderNumber}</strong>
                       <br />
                       <span className="muted small">{order.source}</span>
                     </td>
                     <td>
-                      {order.customer}
+                      {order.customer.name}
                       <br />
-                      <span className="muted small">{order.phone}</span>
+                      <span className="muted small">{order.customer.phone}</span>
                     </td>
-                    <td>{order.article}</td>
                     <td>
                       <span className="badge">{order.productionStatus}</span>
                     </td>
                     <td>
                       <span className="badge soft">{order.paymentStatus}</span>
                     </td>
-                    <td>{order.dueDate}</td>
+                    <td>{currency.format(order.total)}</td>
                   </tr>
                 ))}
+                {!loading && orderList.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="muted">
+                      No orders yet.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -117,22 +161,22 @@ export default function DashboardPage() {
             <li>
               <span>1</span>
               <div>
-                <strong>Photograph SL-1025</strong>
-                <p>Upload front, back, detail and vertical video.</p>
+                <strong>Review flagged payments</strong>
+                <p>{flaggedCount} order(s) need follow-up.</p>
               </div>
             </li>
             <li>
               <span>2</span>
               <div>
-                <strong>Buy maroon silk</strong>
-                <p>Only 3.5 metres remain available.</p>
+                <strong>Restock low inventory</strong>
+                <p>{lowStockCount} product(s) below reorder level.</p>
               </div>
             </li>
             <li>
               <span>3</span>
               <div>
-                <strong>Collect COD for SL-1026</strong>
-                <p>Reconcile after delivery confirmation.</p>
+                <strong>Confirm new phone orders</strong>
+                <p>Use the guided wizard for phone and WhatsApp orders.</p>
               </div>
             </li>
           </ol>

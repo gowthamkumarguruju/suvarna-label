@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { orders } from "@/lib/mock-data";
+import { useGraphQL } from "@/lib/use-graphql";
+import { ORDERS_QUERY } from "@/graphql/operations";
 
 const currency = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -7,7 +11,32 @@ const currency = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0,
 });
 
+type OrderRow = {
+  id: string;
+  orderNumber: string;
+  source: string;
+  status: string;
+  productionStatus: string;
+  mediaStatus: string;
+  total: number;
+  customer: { name: string; phone: string };
+  items: Array<{ articleType: string; description: string }>;
+};
+
 export default function OrdersPage() {
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const { data, loading, error } = useGraphQL<
+    { orders: OrderRow[] },
+    { status?: string }
+  >(
+    ORDERS_QUERY,
+    { status: statusFilter === "all" ? undefined : statusFilter },
+    [statusFilter],
+  );
+
+  const orders = data?.orders ?? [];
+
   return (
     <>
       <header className="page-header">
@@ -15,7 +44,8 @@ export default function OrdersPage() {
           <p className="eyebrow">Order management</p>
           <h1>Orders</h1>
           <p className="muted">
-            Phone, WhatsApp, website, Instagram and walk-in orders in one place.
+            Phone, WhatsApp, website, Instagram and walk-in orders in one
+            place.
           </p>
         </div>
         <Link href="/admin/orders/new" className="button primary">
@@ -25,19 +55,21 @@ export default function OrdersPage() {
 
       <section className="panel">
         <div className="filter-row">
-          <input placeholder="Search order, customer or phone" />
-          <select defaultValue="all">
-            <option value="all">All sources</option>
-            <option>Phone</option>
-            <option>Website</option>
-            <option>Instagram</option>
-          </select>
-          <select defaultValue="all">
+          <select
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value)}
+          >
             <option value="all">All statuses</option>
-            <option>Confirmed</option>
-            <option>Completed</option>
+            <option value="DRAFT">Draft</option>
+            <option value="AWAITING_CONFIRMATION">Awaiting confirmation</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="ON_HOLD">On hold</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CANCELLED">Cancelled</option>
           </select>
         </div>
+
+        {error && <p className="muted">Couldn&apos;t load orders: {error}</p>}
 
         <div className="table-wrap">
           <table>
@@ -46,9 +78,8 @@ export default function OrdersPage() {
                 <th>Order</th>
                 <th>Customer</th>
                 <th>Article</th>
-                <th>Order</th>
+                <th>Order status</th>
                 <th>Production</th>
-                <th>Media</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -56,26 +87,32 @@ export default function OrdersPage() {
               {orders.map((order) => (
                 <tr key={order.id}>
                   <td>
-                    <strong>{order.id}</strong>
+                    <strong>{order.orderNumber}</strong>
                     <br />
                     <span className="muted small">{order.source}</span>
                   </td>
                   <td>
-                    {order.customer}
+                    {order.customer.name}
                     <br />
-                    <span className="muted small">{order.phone}</span>
+                    <span className="muted small">{order.customer.phone}</span>
                   </td>
-                  <td>{order.article}</td>
+                  <td>{order.items[0]?.description ?? "—"}</td>
                   <td>
-                    <span className="badge soft">{order.orderStatus}</span>
+                    <span className="badge soft">{order.status}</span>
                   </td>
                   <td>
                     <span className="badge">{order.productionStatus}</span>
                   </td>
-                  <td>{order.mediaStatus}</td>
                   <td>{currency.format(order.total)}</td>
                 </tr>
               ))}
+              {!loading && orders.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="muted">
+                    No orders match this filter.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
