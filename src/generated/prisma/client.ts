@@ -92,6 +92,11 @@ export type Payment = Prisma.PaymentModel
  */
 export type Shipment = Prisma.ShipmentModel
 /**
+ * Model OrderMedia
+ * 
+ */
+export type OrderMedia = Prisma.OrderMediaModel
+/**
  * Model OrderStatusHistory
  * 
  */

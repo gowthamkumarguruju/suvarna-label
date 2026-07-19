@@ -289,3 +289,65 @@ export const UPDATE_PAYMENT_STATUS_MUTATION = /* GraphQL */ `
     }
   }
 `;
+
+export const MEDIA_ORDERS_QUERY = /* GraphQL */ `
+  query MediaOrders($status: OrderStatus, $limit: Int) {
+    orders(status: $status, limit: $limit) {
+      id
+      orderNumber
+      mediaStatus
+      customer {
+        name
+        phone
+      }
+      items {
+        articleType
+        description
+        color
+      }
+      media {
+        id
+        url
+        caption
+        approved
+        createdAt
+      }
+    }
+  }
+`;
+
+export const ADD_ORDER_MEDIA_MUTATION = /* GraphQL */ `
+  mutation AddOrderMedia($input: AddOrderMediaInput!) {
+    addOrderMedia(input: $input) {
+      id
+      mediaStatus
+      media {
+        id
+        url
+        approved
+      }
+    }
+  }
+`;
+
+export const APPROVE_ORDER_MEDIA_MUTATION = /* GraphQL */ `
+  mutation ApproveOrderMedia($input: ApproveOrderMediaInput!) {
+    approveOrderMedia(input: $input) {
+      id
+      mediaStatus
+      media {
+        id
+        approved
+      }
+    }
+  }
+`;
+
+export const PUBLISH_ORDER_MEDIA_MUTATION = /* GraphQL */ `
+  mutation PublishOrderMedia($input: PublishOrderMediaInput!) {
+    publishOrderMedia(input: $input) {
+      id
+      mediaStatus
+    }
+  }
+`;

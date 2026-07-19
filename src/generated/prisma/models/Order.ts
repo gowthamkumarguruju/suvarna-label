@@ -330,6 +330,7 @@ export type OrderWhereInput = {
   productionJobs?: Prisma.ProductionJobListRelationFilter
   shipments?: Prisma.ShipmentListRelationFilter
   orderStatusHistory?: Prisma.OrderStatusHistoryListRelationFilter
+  media?: Prisma.OrderMediaListRelationFilter
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -356,6 +357,7 @@ export type OrderOrderByWithRelationInput = {
   productionJobs?: Prisma.ProductionJobOrderByRelationAggregateInput
   shipments?: Prisma.ShipmentOrderByRelationAggregateInput
   orderStatusHistory?: Prisma.OrderStatusHistoryOrderByRelationAggregateInput
+  media?: Prisma.OrderMediaOrderByRelationAggregateInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -385,6 +387,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   productionJobs?: Prisma.ProductionJobListRelationFilter
   shipments?: Prisma.ShipmentListRelationFilter
   orderStatusHistory?: Prisma.OrderStatusHistoryListRelationFilter
+  media?: Prisma.OrderMediaListRelationFilter
 }, "id" | "orderNumber">
 
 export type OrderOrderByWithAggregationInput = {
@@ -458,6 +461,7 @@ export type OrderCreateInput = {
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -483,6 +487,7 @@ export type OrderUncheckedCreateInput = {
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
@@ -508,6 +513,7 @@ export type OrderUpdateInput = {
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -533,6 +539,7 @@ export type OrderUncheckedUpdateInput = {
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
@@ -781,6 +788,20 @@ export type OrderUpdateOneRequiredWithoutShipmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutShipmentsInput, Prisma.OrderUpdateWithoutShipmentsInput>, Prisma.OrderUncheckedUpdateWithoutShipmentsInput>
 }
 
+export type OrderCreateNestedOneWithoutMediaInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutMediaInput, Prisma.OrderUncheckedCreateWithoutMediaInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutMediaInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutMediaNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutMediaInput, Prisma.OrderUncheckedCreateWithoutMediaInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutMediaInput
+  upsert?: Prisma.OrderUpsertWithoutMediaInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutMediaInput, Prisma.OrderUpdateWithoutMediaInput>, Prisma.OrderUncheckedUpdateWithoutMediaInput>
+}
+
 export type OrderCreateNestedOneWithoutOrderStatusHistoryInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutOrderStatusHistoryInput, Prisma.OrderUncheckedCreateWithoutOrderStatusHistoryInput>
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutOrderStatusHistoryInput
@@ -817,6 +838,7 @@ export type OrderCreateWithoutCustomerInput = {
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutCustomerInput = {
@@ -841,6 +863,7 @@ export type OrderUncheckedCreateWithoutCustomerInput = {
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutCustomerInput = {
@@ -914,6 +937,7 @@ export type OrderCreateWithoutItemsInput = {
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutItemsInput = {
@@ -938,6 +962,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -978,6 +1003,7 @@ export type OrderUpdateWithoutItemsInput = {
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -1002,6 +1028,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutProductionJobsInput = {
@@ -1026,6 +1053,7 @@ export type OrderCreateWithoutProductionJobsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutProductionJobsInput = {
@@ -1050,6 +1078,7 @@ export type OrderUncheckedCreateWithoutProductionJobsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutProductionJobsInput = {
@@ -1090,6 +1119,7 @@ export type OrderUpdateWithoutProductionJobsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutProductionJobsInput = {
@@ -1114,6 +1144,7 @@ export type OrderUncheckedUpdateWithoutProductionJobsInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutPaymentsInput = {
@@ -1138,6 +1169,7 @@ export type OrderCreateWithoutPaymentsInput = {
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutPaymentsInput = {
@@ -1162,6 +1194,7 @@ export type OrderUncheckedCreateWithoutPaymentsInput = {
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutPaymentsInput = {
@@ -1202,6 +1235,7 @@ export type OrderUpdateWithoutPaymentsInput = {
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutPaymentsInput = {
@@ -1226,6 +1260,7 @@ export type OrderUncheckedUpdateWithoutPaymentsInput = {
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutShipmentsInput = {
@@ -1250,6 +1285,7 @@ export type OrderCreateWithoutShipmentsInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutOrderInput
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutShipmentsInput = {
@@ -1274,6 +1310,7 @@ export type OrderUncheckedCreateWithoutShipmentsInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrderInput
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutShipmentsInput = {
@@ -1314,6 +1351,7 @@ export type OrderUpdateWithoutShipmentsInput = {
   payments?: Prisma.PaymentUpdateManyWithoutOrderNestedInput
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutShipmentsInput = {
@@ -1337,6 +1375,123 @@ export type OrderUncheckedUpdateWithoutShipmentsInput = {
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrderNestedInput
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
+  orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutMediaInput = {
+  id?: string
+  orderNumber: string
+  source: string
+  status: string
+  productionStatus: string
+  paymentStatus: string
+  fulfilmentStatus: string
+  mediaStatus: string
+  requiredBy?: Date | string | null
+  subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shippingCharge?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutOrderInput
+  productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
+  shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
+  orderStatusHistory?: Prisma.OrderStatusHistoryCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutMediaInput = {
+  id?: string
+  orderNumber: string
+  customerId: string
+  source: string
+  status: string
+  productionStatus: string
+  paymentStatus: string
+  fulfilmentStatus: string
+  mediaStatus: string
+  requiredBy?: Date | string | null
+  subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  shippingCharge?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrderInput
+  productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
+  shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
+  orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutMediaInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutMediaInput, Prisma.OrderUncheckedCreateWithoutMediaInput>
+}
+
+export type OrderUpsertWithoutMediaInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutMediaInput, Prisma.OrderUncheckedUpdateWithoutMediaInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutMediaInput, Prisma.OrderUncheckedCreateWithoutMediaInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutMediaInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutMediaInput, Prisma.OrderUncheckedUpdateWithoutMediaInput>
+}
+
+export type OrderUpdateWithoutMediaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  productionStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  fulfilmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  requiredBy?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shippingCharge?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutOrderNestedInput
+  productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
+  shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
+  orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutMediaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  productionStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  fulfilmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  requiredBy?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  shippingCharge?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrderNestedInput
+  productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
+  shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
 }
 
@@ -1362,6 +1517,7 @@ export type OrderCreateWithoutOrderStatusHistoryInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutOrderInput
   productionJobs?: Prisma.ProductionJobCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutOrderStatusHistoryInput = {
@@ -1386,6 +1542,7 @@ export type OrderUncheckedCreateWithoutOrderStatusHistoryInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutOrderInput
   productionJobs?: Prisma.ProductionJobUncheckedCreateNestedManyWithoutOrderInput
   shipments?: Prisma.ShipmentUncheckedCreateNestedManyWithoutOrderInput
+  media?: Prisma.OrderMediaUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutOrderStatusHistoryInput = {
@@ -1426,6 +1583,7 @@ export type OrderUpdateWithoutOrderStatusHistoryInput = {
   payments?: Prisma.PaymentUpdateManyWithoutOrderNestedInput
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutOrderStatusHistoryInput = {
@@ -1450,6 +1608,7 @@ export type OrderUncheckedUpdateWithoutOrderStatusHistoryInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutOrderNestedInput
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyCustomerInput = {
@@ -1493,6 +1652,7 @@ export type OrderUpdateWithoutCustomerInput = {
   productionJobs?: Prisma.ProductionJobUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutCustomerInput = {
@@ -1517,6 +1677,7 @@ export type OrderUncheckedUpdateWithoutCustomerInput = {
   productionJobs?: Prisma.ProductionJobUncheckedUpdateManyWithoutOrderNestedInput
   shipments?: Prisma.ShipmentUncheckedUpdateManyWithoutOrderNestedInput
   orderStatusHistory?: Prisma.OrderStatusHistoryUncheckedUpdateManyWithoutOrderNestedInput
+  media?: Prisma.OrderMediaUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutCustomerInput = {
@@ -1549,6 +1710,7 @@ export type OrderCountOutputType = {
   productionJobs: number
   shipments: number
   orderStatusHistory: number
+  media: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1557,6 +1719,7 @@ export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   productionJobs?: boolean | OrderCountOutputTypeCountProductionJobsArgs
   shipments?: boolean | OrderCountOutputTypeCountShipmentsArgs
   orderStatusHistory?: boolean | OrderCountOutputTypeCountOrderStatusHistoryArgs
+  media?: boolean | OrderCountOutputTypeCountMediaArgs
 }
 
 /**
@@ -1604,6 +1767,13 @@ export type OrderCountOutputTypeCountOrderStatusHistoryArgs<ExtArgs extends runt
   where?: Prisma.OrderStatusHistoryWhereInput
 }
 
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountMediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderMediaWhereInput
+}
+
 
 export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1629,6 +1799,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   productionJobs?: boolean | Prisma.Order$productionJobsArgs<ExtArgs>
   shipments?: boolean | Prisma.Order$shipmentsArgs<ExtArgs>
   orderStatusHistory?: boolean | Prisma.Order$orderStatusHistoryArgs<ExtArgs>
+  media?: boolean | Prisma.Order$mediaArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -1702,6 +1873,7 @@ export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   productionJobs?: boolean | Prisma.Order$productionJobsArgs<ExtArgs>
   shipments?: boolean | Prisma.Order$shipmentsArgs<ExtArgs>
   orderStatusHistory?: boolean | Prisma.Order$orderStatusHistoryArgs<ExtArgs>
+  media?: boolean | Prisma.Order$mediaArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1720,6 +1892,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     productionJobs: Prisma.$ProductionJobPayload<ExtArgs>[]
     shipments: Prisma.$ShipmentPayload<ExtArgs>[]
     orderStatusHistory: Prisma.$OrderStatusHistoryPayload<ExtArgs>[]
+    media: Prisma.$OrderMediaPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2139,6 +2312,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   productionJobs<T extends Prisma.Order$productionJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$productionJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductionJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shipments<T extends Prisma.Order$shipmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$shipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderStatusHistory<T extends Prisma.Order$orderStatusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$orderStatusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  media<T extends Prisma.Order$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2703,6 +2877,30 @@ export type Order$orderStatusHistoryArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.OrderStatusHistoryScalarFieldEnum | Prisma.OrderStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * Order.media
+ */
+export type Order$mediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderMedia
+   */
+  select?: Prisma.OrderMediaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderMedia
+   */
+  omit?: Prisma.OrderMediaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderMediaInclude<ExtArgs> | null
+  where?: Prisma.OrderMediaWhereInput
+  orderBy?: Prisma.OrderMediaOrderByWithRelationInput | Prisma.OrderMediaOrderByWithRelationInput[]
+  cursor?: Prisma.OrderMediaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderMediaScalarFieldEnum | Prisma.OrderMediaScalarFieldEnum[]
 }
 
 /**
