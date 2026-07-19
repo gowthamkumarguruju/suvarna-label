@@ -7,6 +7,7 @@ const navigation = [
   ["New phone order", "/admin/orders/new"],
   ["Inventory", "/admin/inventory"],
   ["Payments", "/admin/payments"],
+  ["Media", "/admin/media"],
   ["Customer shop", "/shop"],
 ];
 

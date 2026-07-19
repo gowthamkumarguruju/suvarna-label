@@ -61,6 +61,7 @@ export const ModelName = {
   ProductionJob: 'ProductionJob',
   Payment: 'Payment',
   Shipment: 'Shipment',
+  OrderMedia: 'OrderMedia',
   OrderStatusHistory: 'OrderStatusHistory'
 } as const
 
@@ -238,6 +239,19 @@ export const ShipmentScalarFieldEnum = {
 } as const
 
 export type ShipmentScalarFieldEnum = (typeof ShipmentScalarFieldEnum)[keyof typeof ShipmentScalarFieldEnum]
+
+
+export const OrderMediaScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  url: 'url',
+  caption: 'caption',
+  approved: 'approved',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderMediaScalarFieldEnum = (typeof OrderMediaScalarFieldEnum)[keyof typeof OrderMediaScalarFieldEnum]
 
 
 export const OrderStatusHistoryScalarFieldEnum = {

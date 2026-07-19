@@ -394,6 +394,7 @@ export const ModelName = {
   ProductionJob: 'ProductionJob',
   Payment: 'Payment',
   Shipment: 'Shipment',
+  OrderMedia: 'OrderMedia',
   OrderStatusHistory: 'OrderStatusHistory'
 } as const
 
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "product" | "customer" | "customerAddress" | "measurementProfile" | "measurementValue" | "order" | "orderItem" | "productionJob" | "payment" | "shipment" | "orderStatusHistory"
+    modelProps: "product" | "customer" | "customerAddress" | "measurementProfile" | "measurementValue" | "order" | "orderItem" | "productionJob" | "payment" | "shipment" | "orderMedia" | "orderStatusHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1154,6 +1155,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrderMedia: {
+      payload: Prisma.$OrderMediaPayload<ExtArgs>
+      fields: Prisma.OrderMediaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderMediaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderMediaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderMediaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderMediaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        findMany: {
+          args: Prisma.OrderMediaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>[]
+        }
+        create: {
+          args: Prisma.OrderMediaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        createMany: {
+          args: Prisma.OrderMediaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderMediaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderMediaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        update: {
+          args: Prisma.OrderMediaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderMediaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderMediaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderMediaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderMediaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderMediaPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderMediaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderMedia>
+        }
+        groupBy: {
+          args: Prisma.OrderMediaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderMediaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderMediaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderMediaCountAggregateOutputType> | number
+        }
+      }
+    }
     OrderStatusHistory: {
       payload: Prisma.$OrderStatusHistoryPayload<ExtArgs>
       fields: Prisma.OrderStatusHistoryFieldRefs
@@ -1427,6 +1502,19 @@ export const ShipmentScalarFieldEnum = {
 export type ShipmentScalarFieldEnum = (typeof ShipmentScalarFieldEnum)[keyof typeof ShipmentScalarFieldEnum]
 
 
+export const OrderMediaScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  url: 'url',
+  caption: 'caption',
+  approved: 'approved',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderMediaScalarFieldEnum = (typeof OrderMediaScalarFieldEnum)[keyof typeof OrderMediaScalarFieldEnum]
+
+
 export const OrderStatusHistoryScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -1554,6 +1642,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1690,6 +1785,7 @@ export type GlobalOmitConfig = {
   productionJob?: Prisma.ProductionJobOmit
   payment?: Prisma.PaymentOmit
   shipment?: Prisma.ShipmentOmit
+  orderMedia?: Prisma.OrderMediaOmit
   orderStatusHistory?: Prisma.OrderStatusHistoryOmit
 }
 

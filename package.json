@@ -10,7 +10,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "check:payments": "tsx scripts/check-payments.ts"
+    "check:payments": "tsx scripts/check-payments.ts",
+    "check:media": "tsx scripts/check-media.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

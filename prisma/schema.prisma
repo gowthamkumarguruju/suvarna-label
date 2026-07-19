@@ -93,6 +93,7 @@ model Order {
   productionJobs     ProductionJob[]
   shipments          Shipment[]
   orderStatusHistory OrderStatusHistory[]
+  media              OrderMedia[]
 }
 
 model OrderItem {
@@ -152,6 +153,17 @@ model Shipment {
   estimatedDelivery   DateTime?
   deliveredAt         DateTime?
   codAmount           Decimal?  @db.Decimal(12, 2)
+}
+
+model OrderMedia {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  url       String
+  caption   String?
+  approved  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model OrderStatusHistory {

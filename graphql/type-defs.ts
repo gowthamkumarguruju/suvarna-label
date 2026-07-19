@@ -111,6 +111,7 @@ export const typeDefs = /* GraphQL */ `
     paymentStatus: PaymentStatus!
     fulfilmentStatus: FulfilmentStatus!
     mediaStatus: MediaStatus!
+    media: [OrderMedia!]!
     requiredBy: String
     subtotal: Float!
     discount: Float!
@@ -124,6 +125,14 @@ export const typeDefs = /* GraphQL */ `
     shipments: [Shipment!]!
     createdAt: String!
     updatedAt: String!
+  }
+
+  type OrderMedia {
+    id: ID!
+    url: String!
+    caption: String
+    approved: Boolean!
+    createdAt: String!
   }
 
   type OrderItem {
@@ -286,6 +295,20 @@ export const typeDefs = /* GraphQL */ `
     status: PaymentStatus!
   }
 
+  input AddOrderMediaInput {
+    orderId: ID!
+    urls: [String!]!
+  }
+
+  input ApproveOrderMediaInput {
+    orderId: ID!
+    mediaIds: [ID!]!
+  }
+
+  input PublishOrderMediaInput {
+    orderId: ID!
+  }
+
   type Query {
     customerByPhone(phone: String!): Customer
     customer(id: ID!): Customer
@@ -315,5 +338,9 @@ export const typeDefs = /* GraphQL */ `
 
     recordPayment(input: RecordPaymentInput!): Payment!
     updatePaymentStatus(input: UpdatePaymentStatusInput!): Payment!
+
+    addOrderMedia(input: AddOrderMediaInput!): Order!
+    approveOrderMedia(input: ApproveOrderMediaInput!): Order!
+    publishOrderMedia(input: PublishOrderMediaInput!): Order!
   }
 `;

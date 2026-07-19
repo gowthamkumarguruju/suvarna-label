@@ -128,6 +128,11 @@ const orderIncludes = {
   payments: true,
   productionJobs: true,
   shipments: true,
+  media: {
+    orderBy: {
+      sortOrder: "asc",
+    },
+  },
 } as const;
 
 const LOW_STOCK_THRESHOLD = 10;
@@ -519,6 +524,12 @@ export const resolvers = {
         },
       });
 
+      const mediaStatus =
+        input.mediaStatus ??
+        (input.status === "COMPLETED" && current.mediaStatus === "NOT_REQUIRED"
+          ? "PHOTOGRAPHY_PENDING"
+          : undefined);
+
       const updated = await prisma.order.update({
         where: {
           id: input.orderId,
@@ -528,7 +539,7 @@ export const resolvers = {
           productionStatus: input.productionStatus as never,
           paymentStatus: input.paymentStatus as never,
           fulfilmentStatus: input.fulfilmentStatus as never,
-          mediaStatus: input.mediaStatus as never,
+          mediaStatus: mediaStatus as never,
         },
         include: orderIncludes,
       });
@@ -546,7 +557,7 @@ export const resolvers = {
           current.fulfilmentStatus,
           input.fulfilmentStatus,
         ],
-        ["MEDIA", current.mediaStatus, input.mediaStatus],
+        ["MEDIA", current.mediaStatus, mediaStatus],
       ].filter((entry) => entry[2] && entry[1] !== entry[2]);
 
       if (historyEntries.length) {
@@ -699,6 +710,148 @@ export const resolvers = {
 
       return updated;
     },
+
+    addOrderMedia: async (
+      _parent: unknown,
+      args: { input: { orderId: string; urls: string[] } },
+    ) => {
+      const input = args.input;
+
+      if (!input.urls.length) {
+        throw new Error("At least one image URL is required");
+      }
+
+      const order = await prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+        include: { media: true },
+      });
+
+      const startingSortOrder = order.media.length;
+
+      await prisma.$transaction(async (tx) => {
+        await tx.orderMedia.createMany({
+          data: input.urls.map((url, index) => ({
+            orderId: input.orderId,
+            url,
+            sortOrder: startingSortOrder + index,
+          })),
+        });
+
+        if (order.mediaStatus === "PHOTOGRAPHY_PENDING") {
+          await tx.order.update({
+            where: { id: input.orderId },
+            data: { mediaStatus: "IMAGES_UPLOADED" },
+          });
+
+          await tx.orderStatusHistory.create({
+            data: {
+              orderId: input.orderId,
+              group: "MEDIA",
+              fromValue: "PHOTOGRAPHY_PENDING",
+              toValue: "IMAGES_UPLOADED",
+              notes: `${input.urls.length} photo(s) uploaded`,
+            },
+          });
+        }
+      });
+
+      return prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+        include: orderIncludes,
+      });
+    },
+
+    approveOrderMedia: async (
+      _parent: unknown,
+      args: { input: { orderId: string; mediaIds: string[] } },
+    ) => {
+      const input = args.input;
+
+      const order = await prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+        include: { media: true },
+      });
+
+      const validIds = new Set(order.media.map((media) => media.id));
+      const idsToApprove = input.mediaIds.filter((id) => validIds.has(id));
+
+      await prisma.$transaction(async (tx) => {
+        await tx.orderMedia.updateMany({
+          where: { id: { in: idsToApprove } },
+          data: { approved: true },
+        });
+
+        const allApproved = order.media.every(
+          (media) => media.approved || idsToApprove.includes(media.id),
+        );
+
+        if (
+          allApproved &&
+          (order.mediaStatus === "IMAGES_UPLOADED" ||
+            order.mediaStatus === "INTERNAL_REVIEW")
+        ) {
+          await tx.order.update({
+            where: { id: input.orderId },
+            data: { mediaStatus: "APPROVED" },
+          });
+
+          await tx.orderStatusHistory.create({
+            data: {
+              orderId: input.orderId,
+              group: "MEDIA",
+              fromValue: order.mediaStatus,
+              toValue: "APPROVED",
+              notes: "All photos verified and approved",
+            },
+          });
+        }
+      });
+
+      return prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+        include: orderIncludes,
+      });
+    },
+
+    publishOrderMedia: async (
+      _parent: unknown,
+      args: { input: { orderId: string } },
+    ) => {
+      const input = args.input;
+
+      const order = await prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+      });
+
+      if (order.mediaStatus !== "APPROVED") {
+        throw new Error(
+          "Photos must be verified and approved before publishing",
+        );
+      }
+
+      await prisma.$transaction(async (tx) => {
+        await tx.order.update({
+          where: { id: input.orderId },
+          data: { mediaStatus: "PUBLISHED" },
+        });
+
+        await tx.orderStatusHistory.create({
+          data: {
+            orderId: input.orderId,
+            group: "MEDIA",
+            fromValue: "APPROVED",
+            toValue: "PUBLISHED",
+            notes:
+              "Marked published manually — automatic social posting isn't configured yet",
+          },
+        });
+      });
+
+      return prisma.order.findUniqueOrThrow({
+        where: { id: input.orderId },
+        include: orderIncludes,
+      });
+    },
   },
 
   Customer: {
@@ -784,6 +937,10 @@ export const resolvers = {
 
     measurements: (item: { measurementSnapshot?: unknown }) =>
       snapshotToMeasurements(item.measurementSnapshot),
+  },
+
+  OrderMedia: {
+    createdAt: (media: { createdAt: Date }) => media.createdAt.toISOString(),
   },
 
   Payment: {
